@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  project2
+//  project2x
 //
 //  Created by Otto Wichmann on 11/19/16.
 //  Copyright © 2016 ottodevelops. All rights reserved.
