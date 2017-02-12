@@ -43,6 +43,15 @@ class ViewController: UIViewController {
         label.font = UIFont(name: "System", size: 25)
         return label
     }()
+    lazy var  buttonStart: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(r: 40, g: 101, b: 161)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Start", for: .normal)
+        button.addTarget(self, action: #selector(startGame), for: .touchUpInside)
+        return button
+    }()
+    
     lazy var buttonOne: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(r: 40, g: 101, b: 161)
@@ -55,6 +64,7 @@ class ViewController: UIViewController {
         button.addTarget(self, action: #selector(buttonTouched), for: .touchUpInside)
         return button
     }()
+    
     
     lazy var buttonTwo: UIButton = {
         let button = UIButton(type: .system)
@@ -93,19 +103,42 @@ class ViewController: UIViewController {
         view.addSubview(buttonThree)
         view.addSubview(scoreLabel)
         view.addSubview(countDownLabel)
+        view.addSubview(buttonStart)
         setUpButtonOne()
         setUpButtonTwo()
         setUpButtonThree()
-        startTimer()
+        setUpButtonStart()
+        
+        toggleFlagButtons(enable: false)
+
     }
-  
+    func toggleFlagButtons(enable: Bool) {
+        if !enable{
+            buttonOne.isEnabled = false
+            buttonTwo.isEnabled = false
+            buttonThree.isEnabled = false
+        }else{
+            buttonOne.isEnabled = true
+            buttonTwo.isEnabled = true
+            buttonThree.isEnabled = true
+        }
+    }
+    func startGame() {
+        toggleFlagButtons(enable: true)
+        startTimer()
+        askQuestion(action: nil)
+       
+    }
     func startTimer(){
+        buttonStart.isEnabled = false
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ViewController.countdown), userInfo: nil, repeats: true)
     }
     func countdown(){
         
         if(count == 0) {
             timer.invalidate()
+            toggleFlagButtons(enable: false)
+
         } else {
             count = count - 1
         }
@@ -132,8 +165,7 @@ class ViewController: UIViewController {
     func setUpGameAgain(action: UIAlertAction!) {
         score = 0
         count = 10
-        startTimer()
-        askQuestion(action: nil)
+        buttonStart.isEnabled = true
     }
     func askQuestion(action: UIAlertAction!){
         countries = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: countries) as! [String]
@@ -147,6 +179,13 @@ class ViewController: UIViewController {
     }
     func loadCountries(){
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
+    }
+    
+    func setUpButtonStart(){
+        buttonStart.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        buttonStart.topAnchor.constraint(equalTo: buttonThree.bottomAnchor, constant: 50).isActive = true
+        buttonStart.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        buttonStart.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     func setUpButtonOne(){
         // need x, y, widht and height
